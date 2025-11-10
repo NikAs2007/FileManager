@@ -1,5 +1,7 @@
 ﻿#include "FileManager.h"
 
+//Добавляем поиск файлов
+
 int main()
 {
     //SetConsoleOutputCP(65001);
