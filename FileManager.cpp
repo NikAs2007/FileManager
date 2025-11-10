@@ -300,6 +300,16 @@ vector<path> FileManager::fin(path pathv, vector<string>& ext, vector<string>& e
 			}
 		}
 
+		if (ans.empty()) {
+			cout << "Файлов/Папок с такой маской не найдено.\n" << endl;
+		}
+		else {
+			cout << "Найдено (" << ans.size() << "):" << endl;
+			for (path p : ans) {
+				cout << p.filename().string() << endl;
+			}
+		}
+
 		cout << endl;
 
 		return ans;
