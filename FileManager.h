@@ -58,7 +58,7 @@ protected:
 
     bool have_danger_characters(string name);
 
-    vector<path> fin(path path, vector<string>& ext, vector<string>& exeptions);
+    virtual vector<path> fin(path path, vector<string>& ext, vector<string>& exeptions);
 
     void helper_fin(path pathv, vector<string>& ext, vector<string>& exeptions, vector<path>& all_paths);
 
@@ -71,6 +71,7 @@ public:
 class FileManagerUI : public FileManager {
 protected:
     bool flags_parser(string all_flags) override;
+    vector<path> fin(path path, vector<string>& ext, vector<string>& exeptions) override;
 public:
     void ui_asking();
 };
@@ -81,6 +82,7 @@ public:
     using FileManager::ren;
     using FileManager::del;
     using FileManager::cre;
+    using FileManager::fin;
     using FileManager::have_danger_characters;
     using FileManager::is_correct_flags_string;
     using FileManager::flags_parser;

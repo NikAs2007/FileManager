@@ -296,21 +296,8 @@ vector<path> FileManager::fin(path pathv, vector<string>& ext, vector<string>& e
 		for (path p : all_paths) {
 			if (checker(p.filename().string(), ext) && !checker(p.filename().string(), exeptions)) {
 				ans.push_back(p);
-				//cout << p << endl;
 			}
 		}
-
-		if (ans.empty()) {
-			cout << "Файлов/Папок с такой маской не найдено.\n" << endl;
-		}
-		else {
-			cout << "Найдено (" << ans.size() << "):" << endl;
-			for (path p : ans) {
-				cout << p.filename().string() << endl;
-			}
-		}
-
-		cout << endl;
 
 		return ans;
 	}

@@ -35,6 +35,39 @@ bool FileManagerUI::flags_parser(string all_flags) {
 	return true;
 }
 
+vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>& exeptions) {
+	if (exists(pathv)) {
+		vector<path> all_paths;
+		helper_fin(pathv, ext, exeptions, all_paths);
+
+		vector<path> ans;
+
+		sort(all_paths.begin(), all_paths.end());
+
+		for (path p : all_paths) {
+			if (checker(p.filename().string(), ext) && !checker(p.filename().string(), exeptions)) {
+				ans.push_back(p);
+				//cout << p << endl;
+			}
+		}
+
+		if (ans.empty()) {
+			cout << "Файлов/Папок с такой маской не найдено.\n" << endl;
+		}
+		else {
+			cout << "Найдено (" << ans.size() << "):" << endl;
+			for (path p : ans) {
+				cout << p.filename().string() << endl;
+			}
+		}
+
+		cout << endl;
+
+		return ans;
+	}
+	return vector<path>();
+}
+
 void FileManagerUI::ui_asking() {
 	while (!stop) {
 		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nЗакрыть [7]\nВыберите команду: ";
