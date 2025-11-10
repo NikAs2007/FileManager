@@ -283,3 +283,35 @@ bool FileManager::have_danger_characters(string name) {
 	}
 	return false;
 }
+
+vector<path> FileManager::fin(path pathv, vector<string>& ext, vector<string>& exeptions) {
+	if (exists(pathv)) {
+		vector<path> all_paths;
+		helper_fin(pathv, ext, exeptions, all_paths);
+
+		vector<path> ans;
+
+		sort(all_paths.begin(), all_paths.end());
+
+		for (path p : all_paths) {
+			if (checker(p.filename().string(), ext) && !checker(p.filename().string(), exeptions)) {
+				ans.push_back(p);
+				//cout << p << endl;
+			}
+		}
+
+		cout << endl;
+
+		return ans;
+	}
+	return vector<path>();
+}
+
+void FileManager::helper_fin(path pathv, vector<string>& ext, vector<string>& exeptions, vector<path>& all_paths) {
+	for (auto it : directory_iterator(pathv)) {
+		all_paths.push_back(it.path().string());
+		if (is_directory(it.path())) {
+			helper_fin(it.path(), ext, exeptions, all_paths);
+		}
+	}
+}

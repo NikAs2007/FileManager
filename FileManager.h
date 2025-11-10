@@ -58,6 +58,10 @@ protected:
 
     bool have_danger_characters(string name);
 
+    vector<path> fin(path path, vector<string>& ext, vector<string>& exeptions);
+
+    void helper_fin(path pathv, vector<string>& ext, vector<string>& exeptions, vector<path>& all_paths);
+
 public:
 
     FileManager();

@@ -37,7 +37,7 @@ bool FileManagerUI::flags_parser(string all_flags) {
 
 void FileManagerUI::ui_asking() {
 	while (!stop) {
-		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nЗадать флаги [4]\nПосмотреть информацию о флагах [5]\nЗакрыть [6]\nВыберите команду: ";
+		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nЗакрыть [7]\nВыберите команду: ";
 		string com;
 		getline(cin, com);
 		if (com == "1") {
@@ -150,12 +150,43 @@ void FileManagerUI::ui_asking() {
 			}
 		}
 		else if (com == "4") {
+			string path, d = "", repath = "";
+			vector<string> fin_vec, exeptions;
+			cout << "Введите путь: ";
+			getline(cin, path);
+			for (int c = 0; c < path.length(); ++c) {
+				if (path[c] != '"') repath += path[c];
+			}
+			path = repath;
+			if (exists(path)) {
+				cout << "Введите список ключевых слов для удаления (если список закончен, то введите '.'): " << endl;
+				do {
+					if (d != ".") {
+						getline(cin, d);
+						fin_vec.push_back(d);
+					}
+				} while (d != ".");
+				d = "";
+				cout << "Введите список ключевых слов для исключений, это файлы, которые не будут удалены (если список закончен, то введите '.'): " << endl;
+				do {
+					if (d != ".") {
+						getline(cin, d);
+						exeptions.push_back(d);
+					}
+				} while (d != ".");
+				fin(path, fin_vec, exeptions);
+			}
+			else {
+				cout << "Такого пути не существует\n" << endl;
+			}
+		}
+		else if (com == "5") {
 			string parsing_str;
 			cout << "Введите флаги: ";
 			getline(cin, parsing_str);
 			flags_parser(parsing_str);
 		}
-		else if (com == "5") {
+		else if (com == "6") {
 			string d;
 			cout << "Выбор:\nИнфо [1]\nФлаги [2]\nВвод: ";
 			getline(cin, d);
@@ -233,7 +264,7 @@ void FileManagerUI::ui_asking() {
 			}
 			else cout << "Такой команды нет.\n" << endl;
 		}
-		else if (com == "6") {
+		else if (com == "7") {
 			stop = true;
 		}
 		else {
