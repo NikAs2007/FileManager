@@ -57,7 +57,7 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 		else {
 			cout << "Найдено (" << ans.size() << "):" << endl;
 			for (path p : ans) {
-				cout << p.filename().string() << endl;
+				cout << p.string() << endl;
 			}
 		}
 

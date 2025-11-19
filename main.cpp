@@ -4,8 +4,9 @@
 
 int main()
 {
-    //SetConsoleOutputCP(65001);
-    //SetConsoleCP(65001);
+    //system("chcp 65001 > nul");
+    //SetConsoleOutputCP(CP_UTF8);
+    //SetConsoleCP(CP_UTF8);
     setlocale(LC_ALL, "Ru");
 
     FileManager filemanager;

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.30)
 project(FileManager)
 
+# ЖЕСТКО указываем консоль
+#set(CMAKE_EXE_LINKER_FLAGS "-Wl,-subsystem,console")
+
 set(PrName ${PROJECT_NAME})
 set(MAKE_BUILD_TYPE Release)
 
