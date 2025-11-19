@@ -1,6 +1,5 @@
 #include "FileManager.h"
 
-
 bool FileManagerUI::flags_parser(string all_flags) {
 	if (!is_correct_flags_string(all_flags)) {
 		cout << "Ошибка чтения флагов.\n" << endl;
