@@ -1,4 +1,5 @@
 #include "FileManager.h"
+//Кодировка
 
 bool FileManagerUI::flags_parser(string all_flags) {
 	if (!is_correct_flags_string(all_flags)) {
