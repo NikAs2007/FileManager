@@ -1,5 +1,5 @@
-
-//добавить флаг чтобы функции не трогали корневую папку
+п»ї
+//РґРѕР±Р°РІРёС‚СЊ С„Р»Р°Рі С‡С‚РѕР±С‹ С„СѓРЅРєС†РёРё РЅРµ С‚СЂРѕРіР°Р»Рё РєРѕСЂРЅРµРІСѓСЋ РїР°РїРєСѓ
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
@@ -78,7 +78,7 @@ public:
 
 class FileManagerBK : public FileManager {
 public:
-    using FileManager::checker; //повысили уровень доступа до public
+    using FileManager::checker; //РїРѕРІС‹СЃРёР»Рё СѓСЂРѕРІРµРЅСЊ РґРѕСЃС‚СѓРїР° РґРѕ public
     using FileManager::ren;
     using FileManager::del;
     using FileManager::cre;

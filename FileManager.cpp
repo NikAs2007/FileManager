@@ -1,4 +1,4 @@
-#include "FileManager.h"
+п»ї#include "FileManager.h"
 
 FileManager::FileManager() {
 	stop = false;
@@ -31,7 +31,7 @@ bool FileManager::is_correct_flags_string(string flags_string) {
 
 bool FileManager::flags_parser(string all_flags) {
 	if (!is_correct_flags_string(all_flags)) {
-		//cout << "Ошибка чтения флагов.\n" << endl;
+		//cout << "РћС€РёР±РєР° С‡С‚РµРЅРёСЏ С„Р»Р°РіРѕРІ.\n" << endl;
 		return false;
 	}
 	string flag;
@@ -60,7 +60,7 @@ bool FileManager::flags_parser(string all_flags) {
 		else if (flag == "-nroot") rootf = root_off;
 	}
 	return true;
-	//cout << "Флаги успешно установлены.\n" << endl;
+	//cout << "Р¤Р»Р°РіРё СѓСЃРїРµС€РЅРѕ СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹.\n" << endl;
 }
 
 bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions, bool first_call) {
@@ -101,13 +101,13 @@ bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions,
 }
 
 
-//тут баг - при переименовании файлов в тоже имя происходит конфликт между ними и num получает лишнии номера
-//еще баг - нет рекурсивного обхода
+//С‚СѓС‚ Р±Р°Рі - РїСЂРё РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРё С„Р°Р№Р»РѕРІ РІ С‚РѕР¶Рµ РёРјСЏ РїСЂРѕРёСЃС…РѕРґРёС‚ РєРѕРЅС„Р»РёРєС‚ РјРµР¶РґСѓ РЅРёРјРё Рё num РїРѕР»СѓС‡Р°РµС‚ Р»РёС€РЅРёРё РЅРѕРјРµСЂР°
+//РµС‰Рµ Р±Р°Рі - РЅРµС‚ СЂРµРєСѓСЂСЃРёРІРЅРѕРіРѕ РѕР±С…РѕРґР°
 bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions, string name, bool first_call) {
 	if (exists(path)) {
 		if (!checker(path.filename().string(), exeptions) && checker(path.filename().string(), ext)) {
 			if ((rootf == root_on || (rootf == root_off && !first_call)) && (is_directory(path) && (renf == ren_dir || renf == ren_dir_files)) || (!is_directory(path) && (renf == ren_files || renf == ren_dir_files))) {
-				//тут
+				//С‚СѓС‚
 				//if (rootf == root_on || (rootf == root_off && !first_call)) rename(path, path.parent_path().string() + '\\' + name);
 				rename(path, path.parent_path().string() + '\\' + name);
 				path = path.parent_path().string() + '\\' + name;
@@ -265,7 +265,7 @@ bool FileManager::checker(string name, vector<string>& str_list) {
 			}
 			else {
 				if (starting && (l != 0) || !starting && (l == 0)) flag_for_starting = true;
-				//тут добавили флаг
+				//С‚СѓС‚ РґРѕР±Р°РІРёР»Рё С„Р»Р°Рі
 				if (right >= str_list[i].length() - 1 && !ending && ((l + rs - 1) < name.length() - 1)) flag_for_ending = false;
 				left = right + 1;
 				right = left;
