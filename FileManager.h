@@ -9,7 +9,11 @@
 #include <string>
 #include <vector>
 #include <locale>
-#include <windows.h>
+
+#ifdef _WIN64
+    #include <windows.h>
+#endif //_WIN64
+
 #include <algorithm>
 using namespace std;
 using namespace std::filesystem;
