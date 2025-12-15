@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <locale>
+#include "sqlite3.h"
 
 #ifdef _WIN64
     #include <windows.h>
