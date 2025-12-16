@@ -1,15 +1,19 @@
 ﻿#include "FileManager.h"
 
-FileManager::FileManager() {
-	stop = false;
-	recf = recursion_on;
-	delf = del_dir_files;
-	cref = cre_files;
-	renf = ren_dir_files;
-	regf = reg_off;
-	rootf = root_on;
-	danger_chars = { '\\','/',':','*','?','"','<','>','|' };
-	avaliable_flags = { "-rec", "-nrec", "-deld", "-delf", "-delfd", "-cref", "-cred", "-renf", "-rend", "-renfd", "-reg", "-nreg", "-root", "-nroot" };
+FileManager::FileManager() :
+	stop(false),
+	recf(recursion_on),
+	delf(del_dir_files),
+	cref(cre_files),
+	renf(ren_dir_files),
+	regf(reg_off),
+	rootf(root_on),
+	danger_chars({ '\\','/',':','*','?','"','<','>','|' }),
+	avaliable_flags({ "-rec", "-nrec", "-deld", "-delf", "-delfd", "-cref", "-cred", "-renf", "-rend", "-renfd", "-reg", "-nreg", "-root", "-nroot" })
+{
+	if (!exists("history.db")) {
+		ofstream{ "history.db" };
+	}
 }
 
 bool FileManager::is_correct_flags_string(string flags_string) {

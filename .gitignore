@@ -13,3 +13,4 @@ build/
 
 x64/
 Deleter/
+*.db
