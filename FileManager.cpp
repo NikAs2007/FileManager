@@ -173,19 +173,20 @@ bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions,
 				}
 			}
 		}
+		if (first_call) {
+			sqlite3* db;
 
-		sqlite3* db;
+			sqlite3_open("history.db", &db);
 
-		sqlite3_open("history.db", &db);
+			const char* sqlq = "INSERT INTO history (command) VALUES (\"delete\");";
 
-		const char* sqlq = "INSERT INTO history (command) VALUES (\"delete\");";
-
-		char* errmsg = nullptr;
-		sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
-		if (errmsg) cerr << "Error: " << errmsg << endl;
+			char* errmsg = nullptr;
+			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+			if (errmsg) cerr << "Error: " << errmsg << endl;
 
 
-		sqlite3_close(db);
+			sqlite3_close(db);
+		}
 
 		return true;
 	}
@@ -269,6 +270,22 @@ bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions,
 				}
 			}
 		}
+
+		if (first_call) {
+			sqlite3* db;
+
+			sqlite3_open("history.db", &db);
+
+			const char* sqlq = "INSERT INTO history (command) VALUES (\"rename\");";
+
+			char* errmsg = nullptr;
+			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+			if (errmsg) cerr << "Error: " << errmsg << endl;
+
+
+			sqlite3_close(db);
+		}
+
 		return true;
 	}
 	return false;
@@ -317,6 +334,22 @@ bool FileManager::cre(path path, string name, int count_f, bool first_call) {
 				}
 			}
 		}
+
+		if (first_call) {
+			sqlite3* db;
+
+			sqlite3_open("history.db", &db);
+
+			const char* sqlq = "INSERT INTO history (command) VALUES (\"create\");";
+
+			char* errmsg = nullptr;
+			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+			if (errmsg) cerr << "Error: " << errmsg << endl;
+
+
+			sqlite3_close(db);
+		}
+
 		return true;
 	}
 	return false;
