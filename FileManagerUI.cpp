@@ -28,6 +28,7 @@ vector<vector<string>> FileManagerUI::get_history() {
 	if (!history.empty()) {
 		cout << "История:\n";
 		for (int i = 0; i < history.size(); ++i) {
+			cout << "    ";
 			for (int j = 0; j < history[0].size(); ++j) {
 				cout << history[i][j] << ' ';
 			}
@@ -38,6 +39,18 @@ vector<vector<string>> FileManagerUI::get_history() {
 		cout << "История команд пустая.";
 	}
 	cout << "\n\n";
+
+
+	sqlite3_open("history.db", &db);
+
+	sqlq = "INSERT INTO history (command) VALUES (\"history\");";
+
+	char* errmsg2 = nullptr;
+	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg2);
+	if (errmsg2) cerr << "Error: " << errmsg2 << endl;
+
+
+	sqlite3_close(db);
 
 	return history;
 }

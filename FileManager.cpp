@@ -56,6 +56,17 @@ vector<vector<string>> FileManager::get_history() {
 
 	sqlite3_close(db);
 
+	sqlite3_open("history.db", &db);
+
+	sqlq = "INSERT INTO history (command) VALUES (\"history\");";
+
+	char* errmsg2 = nullptr;
+	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg2);
+	if (errmsg2) cerr << "Error: " << errmsg2 << endl;
+
+
+	sqlite3_close(db);
+
 	return history;
 }
 
@@ -370,7 +381,7 @@ vector<path> FileManager::fin(path pathv, vector<string>& ext, vector<string>& e
 
 		sqlite3_open("history.db", &db);
 
-		const char* sqlq = "INSERT INTO history (command) VALUES (find);";
+		const char* sqlq = "INSERT INTO history (command) VALUES (\"find\");";
 
 		char* errmsg = nullptr;
 		sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
