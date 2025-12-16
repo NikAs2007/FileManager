@@ -104,6 +104,19 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 
 		cout << endl;
 
+		sqlite3* db;
+
+		sqlite3_open("history.db", &db);
+
+		const char* sqlq = "INSERT INTO history (command) VALUES (\"find\");";
+
+		char* errmsg = nullptr;
+		sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+		if (errmsg) cerr << "Error: " << errmsg << endl;
+
+
+		sqlite3_close(db);
+
 		return ans;
 	}
 	return vector<path>();
