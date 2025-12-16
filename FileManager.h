@@ -67,6 +67,8 @@ protected:
 
     void helper_fin(path pathv, vector<string>& ext, vector<string>& exeptions, vector<path>& all_paths);
 
+    bool del_history();
+
 public:
 
     FileManager();
@@ -86,6 +88,7 @@ public:
     using FileManager::checker; //повысили уровень доступа до public
     using FileManager::ren;
     using FileManager::del;
+    using FileManager::del_history;
     using FileManager::cre;
     using FileManager::fin;
     using FileManager::have_danger_characters;

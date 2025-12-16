@@ -31,6 +31,27 @@ FileManager::FileManager() :
 	sqlite3_close(db);
 }
 
+bool FileManager::del_history() {
+	sqlite3* db;
+	sqlite3_open("history.db", &db);
+
+	const char* sqlq =
+		"DELETE FROM history;";
+
+	char* errmsg = nullptr;
+	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+	if (errmsg) {
+		//cerr << "Error: " << errmsg << endl << endl;
+		sqlite3_close(db);
+		return false;
+	}
+	else {
+		cout << "История очищена.\n\n";
+		sqlite3_close(db);
+		return true;
+	}
+}
+
 bool FileManager::is_correct_flags_string(string flags_string) {
 	string flag;
 	int i = 0;

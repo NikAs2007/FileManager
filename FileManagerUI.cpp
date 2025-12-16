@@ -305,17 +305,8 @@ void FileManagerUI::ui_asking() {
 
 			}
 			else if (d == "2") {
-				sqlite3* db;
-				sqlite3_open("history.db", &db);
-
-				const char* sqlq =
-					"DELETE FROM history;";
-
-				char* errmsg = nullptr;
-				sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
-				if (errmsg) cerr << "Error: " << errmsg << endl << endl;
-				else cout << "История очищена.\n\n";
-				sqlite3_close(db);
+				if (del_history()) cout << "История очищена.\n\n";
+				else cout << "Произошла неизвестная ошибка!\n\n";
 			}
 			else {
 				cout << "Выбрана неверная команда!\n\n";
