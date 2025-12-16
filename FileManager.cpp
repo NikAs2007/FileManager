@@ -173,6 +173,20 @@ bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions,
 				}
 			}
 		}
+
+		sqlite3* db;
+
+		sqlite3_open("history.db", &db);
+
+		const char* sqlq = "INSERT INTO history (command) VALUES (\"delete\");";
+
+		char* errmsg = nullptr;
+		sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+		if (errmsg) cerr << "Error: " << errmsg << endl;
+
+
+		sqlite3_close(db);
+
 		return true;
 	}
 	return false;

@@ -1,15 +1,5 @@
 ﻿#include "FileManager.h"
 
-//int callback_for_get_history(void* his, int num, char** vals, char** cols) {
-//	vector<vector<string>>* history = static_cast<vector<vector<string>>*>(his);
-//	vector<string> str;
-//	for (int i = 0; i < num; ++i) {
-//		str.push_back(vals[i]);
-//	}
-//	history->push_back(str);
-//	return 0;
-//}
-
 vector<vector<string>> FileManagerUI::get_history() {
 	vector<vector<string>> history;
 
@@ -135,6 +125,7 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 	return vector<path>();
 }
 
+//тут посмотри, когда задач не будет
 void FileManagerUI::ui_asking() {
 	while (!stop) {
 		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nИстория [7]\nЗакрыть [8]\nВыберите команду: ";
