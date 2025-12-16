@@ -14,6 +14,21 @@ FileManager::FileManager() :
 	if (!exists("history.db")) {
 		ofstream{ "history.db" };
 	}
+	sqlite3* db;
+	sqlite3_open("history.db", &db);
+
+	const char* sqlq =
+		"CREATE TABLE IF NOT EXISTS history"
+		"("
+		"id INTEGER PRIMARY KEY AUTOINCREMENT,"
+		"command TEXT"
+		");";
+
+	char* errmsg = nullptr;
+	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+	if (errmsg) cerr << "Error: " << errmsg << endl << endl;
+
+	sqlite3_close(db);
 }
 
 bool FileManager::is_correct_flags_string(string flags_string) {
