@@ -19,7 +19,7 @@
 using namespace std;
 using namespace std::filesystem;
 
-//int callback_for_get_history(void* his, int num, char** vals, char** cols);
+int callback_for_get_history(void* his, int num, char** vals, char** cols);
 
 class FileManager {
 protected:
@@ -71,9 +71,7 @@ protected:
 
     bool del_history();
 
-    //virtual vector<vector<string>> get_history();
-
-    //int callback_for_get_history(void* his, int num, char** vals, char** cols);
+    virtual vector<vector<string>> get_history();
 
 public:
 
@@ -85,7 +83,7 @@ class FileManagerUI : public FileManager {
 protected:
     bool flags_parser(string all_flags) override;
     vector<path> fin(path path, vector<string>& ext, vector<string>& exeptions) override;
-    //vector<vector<string>> get_history() override;
+    vector<vector<string>> get_history() override;
 public:
     void ui_asking();
 };
@@ -96,7 +94,7 @@ public:
     using FileManager::ren;
     using FileManager::del;
     using FileManager::del_history;
-    //using FileManager::get_history;
+    using FileManager::get_history;
     using FileManager::cre;
     using FileManager::fin;
     using FileManager::have_danger_characters;

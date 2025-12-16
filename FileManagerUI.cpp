@@ -10,32 +10,32 @@
 //	return 0;
 //}
 
-//vector<vector<string>> FileManager::get_history() {
-//	vector<vector<string>> history;
-//
-//	sqlite3* db;
-//	sqlite3_open("history.db", &db);
-//
-//	const char* sqlq =
-//		"SELECT command FROM history;";
-//
-//	char* errmsg = nullptr;
-//	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
-//	if (errmsg) cerr << "Error: " << errmsg << endl << endl;
-//
-//	sqlite3_close(db);
-//
-//	cout << "История:\n";
-//	for (int i = 0; i < history.size(); ++i) {
-//		for (int j = 0; j < history[0].size(); ++j) {
-//			cout << history[i][j] << ' ';
-//		}
-//		cout << endl;
-//	}
-//	cout << "\n\n";
-//
-//	return history;
-//}
+vector<vector<string>> FileManagerUI::get_history() {
+	vector<vector<string>> history;
+
+	sqlite3* db;
+	sqlite3_open("history.db", &db);
+
+	const char* sqlq =
+		"SELECT command FROM history;";
+
+	char* errmsg = nullptr;
+	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
+	if (errmsg) cerr << "Error: " << errmsg << endl << endl;
+
+	sqlite3_close(db);
+
+	cout << "История:\n";
+	for (int i = 0; i < history.size(); ++i) {
+		for (int j = 0; j < history[0].size(); ++j) {
+			cout << history[i][j] << ' ';
+		}
+		cout << endl;
+	}
+	cout << "\n\n";
+
+	return history;
+}
 
 bool FileManagerUI::flags_parser(string all_flags) {
 	if (!is_correct_flags_string(all_flags)) {
@@ -338,8 +338,8 @@ void FileManagerUI::ui_asking() {
 			cout << "Выбор:\nПоказать [1]\nОчистить [2]\nВвод: ";
 			getline(cin, d);
 			if (d == "1") {
-				cout << "Ok" << endl;
-				//get_history();
+				//cout << "Ok" << endl;
+				get_history();
 			}
 			else if (d == "2") {
 				//можно добавить подтверждение удаления
