@@ -70,7 +70,7 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 
 void FileManagerUI::ui_asking() {
 	while (!stop) {
-		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nЗакрыть [7]\nВыберите команду: ";
+		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nИстория [7]\nЗакрыть [8]\nВыберите команду: ";
 		string com;
 		getline(cin, com);
 		if (com == "1") {
@@ -298,6 +298,30 @@ void FileManagerUI::ui_asking() {
 			else cout << "Такой команды нет.\n" << endl;
 		}
 		else if (com == "7") {
+			string d;
+			cout << "Выбор:\nПоказать [1]\nОчистить [2]\nВвод: ";
+			getline(cin, d);
+			if (d == "1") {
+
+			}
+			else if (d == "2") {
+				sqlite3* db;
+				sqlite3_open("history.db", &db);
+
+				const char* sqlq =
+					"DELETE FROM history;";
+
+				char* errmsg = nullptr;
+				sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
+				if (errmsg) cerr << "Error: " << errmsg << endl << endl;
+				else cout << "История очищена.\n\n";
+				sqlite3_close(db);
+			}
+			else {
+				cout << "Выбрана неверная команда!\n\n";
+			}
+		}
+		else if (com == "8") {
 			stop = true;
 		}
 		else {
