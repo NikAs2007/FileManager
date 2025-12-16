@@ -25,12 +25,17 @@ vector<vector<string>> FileManagerUI::get_history() {
 
 	sqlite3_close(db);
 
-	cout << "История:\n";
-	for (int i = 0; i < history.size(); ++i) {
-		for (int j = 0; j < history[0].size(); ++j) {
-			cout << history[i][j] << ' ';
+	if (!history.empty()) {
+		cout << "История:\n";
+		for (int i = 0; i < history.size(); ++i) {
+			for (int j = 0; j < history[0].size(); ++j) {
+				cout << history[i][j] << ' ';
+			}
+			cout << endl;
 		}
-		cout << endl;
+	}
+	else {
+		cout << "История команд пустая.";
 	}
 	cout << "\n\n";
 
