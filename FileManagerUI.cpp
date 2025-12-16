@@ -1,5 +1,14 @@
 ﻿#include "FileManager.h"
-//Кодировка
+
+int callback_for_get_history(void* his, int num, char** vals, char** cols) {
+	vector<vector<string>>* history = static_cast<vector<vector<string>>*>(his);
+	vector<string> str;
+	for (int i = 0; i < num; ++i) {
+		str.push_back(vals[i]);
+	}
+	history->push_back(str);
+	return 0;
+}
 
 bool FileManagerUI::flags_parser(string all_flags) {
 	if (!is_correct_flags_string(all_flags)) {
@@ -66,6 +75,33 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 		return ans;
 	}
 	return vector<path>();
+}
+
+vector<vector<string>> FileManager::get_history() {
+	vector<vector<string>> history;
+
+	sqlite3* db;
+	sqlite3_open("history.db", &db);
+
+	const char* sqlq =
+		"SELECT command FROM history;";
+
+	char* errmsg = nullptr;
+	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
+	if (errmsg) cerr << "Error: " << errmsg << endl << endl;
+
+	sqlite3_close(db);
+
+	cout << "История:\n";
+	for (int i = 0; i < history.size(); ++i) {
+		for (int j = 0; j < history[0].size(); ++j) {
+			cout << history[i][j] << ' ';
+		}
+		cout << endl;
+	}
+	cout << "\n\n";
+
+	return history;
 }
 
 void FileManagerUI::ui_asking() {
@@ -305,6 +341,7 @@ void FileManagerUI::ui_asking() {
 
 			}
 			else if (d == "2") {
+				//можно добавить подтверждение удаления
 				if (del_history()) cout << "История очищена.\n\n";
 				else cout << "Произошла неизвестная ошибка!\n\n";
 			}

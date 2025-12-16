@@ -31,6 +31,34 @@ FileManager::FileManager() :
 	sqlite3_close(db);
 }
 
+int callback_for_get_history(void* his, int num, char** vals, char** cols) {
+	vector<vector<string>>* history = static_cast<vector<vector<string>>*>(his);
+	vector<string> str;
+	for (int i = 0; i < num; ++i) {
+		str.push_back(vals[i]);
+	}
+	history->push_back(str);
+	return 0;
+}
+
+vector<vector<string>> FileManager::get_history() {
+	vector<vector<string>> history;
+
+	sqlite3* db;
+	sqlite3_open("history.db", &db);
+
+	const char* sqlq =
+		"SELECT command FROM history;";
+
+	char* errmsg = nullptr;
+	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
+	if (errmsg) cerr << "Error: " << errmsg << endl << endl;
+
+	sqlite3_close(db);
+
+	return history;
+}
+
 bool FileManager::del_history() {
 	sqlite3* db;
 	sqlite3_open("history.db", &db);
