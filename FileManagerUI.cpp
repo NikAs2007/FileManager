@@ -7,7 +7,7 @@ vector<vector<string>> FileManagerUI::get_history() {
 	sqlite3_open("history.db", &db);
 
 	const char* sqlq =
-		"SELECT command FROM history;";
+		"SELECT command, param FROM history;";
 
 	char* errmsg = nullptr;
 	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
@@ -18,8 +18,9 @@ vector<vector<string>> FileManagerUI::get_history() {
 	if (!history.empty()) {
 		cout << "История:\n";
 		for (int i = 0; i < history.size(); ++i) {
-			cout << "    ";
+			//cout << "    ";
 			for (int j = 0; j < history[0].size(); ++j) {
+				cout << setw(4) << "";
 				cout << history[i][j] << ' ';
 			}
 			cout << endl;
@@ -33,7 +34,7 @@ vector<vector<string>> FileManagerUI::get_history() {
 
 	sqlite3_open("history.db", &db);
 
-	sqlq = "INSERT INTO history (command) VALUES (\"history\");";
+	sqlq = "INSERT INTO history (command, param) VALUES (\"history\", \"\");";
 
 	char* errmsg2 = nullptr;
 	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg2);

@@ -21,7 +21,8 @@ FileManager::FileManager() :
 		"CREATE TABLE IF NOT EXISTS history"
 		"("
 		"id INTEGER PRIMARY KEY AUTOINCREMENT,"
-		"command TEXT"
+		"command TEXT,"
+		"param TEXT"
 		");";
 
 	char* errmsg = nullptr;
@@ -48,7 +49,7 @@ vector<vector<string>> FileManager::get_history() {
 	sqlite3_open("history.db", &db);
 
 	const char* sqlq =
-		"SELECT command FROM history;";
+		"SELECT command, param FROM history;";
 
 	char* errmsg = nullptr;
 	sqlite3_exec(db, sqlq, callback_for_get_history, &history, &errmsg);
@@ -58,7 +59,7 @@ vector<vector<string>> FileManager::get_history() {
 
 	sqlite3_open("history.db", &db);
 
-	sqlq = "INSERT INTO history (command) VALUES (\"history\");";
+	sqlq = "INSERT INTO history (command, param) VALUES (\"history\", \"\");";
 
 	char* errmsg2 = nullptr;
 	sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg2);
@@ -142,15 +143,15 @@ bool FileManager::flags_parser(string all_flags) {
 }
 
 //тут есть баг, когда удаляешь все (возможно есть)
-bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions, bool first_call) {
-	if (exists(path)) {
-		if (!checker(path.filename().string(), exeptions) && checker(path.filename().string(), ext)) {
-			if (rootf == root_on && first_call && (delf == del_dir || delf == del_dir_files) && is_directory(path)) {
-				remove_all(path);
+bool FileManager::del(path path_, vector<string>& ext, vector<string>& exeptions, bool first_call) {
+	if (exists(path_)) {
+		if (!checker(path_.filename().string(), exeptions) && checker(path_.filename().string(), ext)) {
+			if (rootf == root_on && first_call && (delf == del_dir || delf == del_dir_files) && is_directory(path_)) {
+				remove_all(path_);
 				return true;
 			}
-			else if ((delf == del_files || delf == del_dir_files) && !is_directory(path)) {
-				remove(path);
+			else if ((delf == del_files || delf == del_dir_files) && !is_directory(path_)) {
+				remove(path_);
 				return true;
 			}
 		}
@@ -158,8 +159,9 @@ bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions,
 			sqlite3* db;
 
 			sqlite3_open("history.db", &db);
+			const string preq = "INSERT INTO history (command, param) VALUES (\"delete\", \"" + path_.string() + "\");";
 
-			const char* sqlq = "INSERT INTO history (command) VALUES (\"delete\");";
+			const char* sqlq = preq.c_str();
 
 			char* errmsg = nullptr;
 			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
@@ -169,8 +171,8 @@ bool FileManager::del(path path, vector<string>& ext, vector<string>& exeptions,
 			sqlite3_close(db);
 		}
 		first_call = false;
-		if (!checker(path.filename().string(), exeptions)) {
-			for (auto& it : directory_iterator(path)) {
+		if (!checker(path_.filename().string(), exeptions)) {
+			for (auto& it : directory_iterator(path_)) {
 				if (is_directory(it.path())) {
 					if (!checker(it.path().filename().string(), exeptions) && checker(it.path().filename().string(), ext)) {
 						if (delf == del_dir || delf == del_dir_files) remove_all(it.path());
@@ -211,7 +213,9 @@ bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions,
 
 			sqlite3_open("history.db", &db);
 
-			const char* sqlq = "INSERT INTO history (command) VALUES (\"rename\");";
+			const string preq = "INSERT INTO history (command, param) VALUES (\"rename\", \"" + path.string() + "\");";
+
+			const char* sqlq = preq.c_str();
 
 			char* errmsg = nullptr;
 			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
@@ -299,8 +303,9 @@ bool FileManager::cre(path path, string name, int count_f, bool first_call) {
 			sqlite3* db;
 
 			sqlite3_open("history.db", &db);
+			const string preq = "INSERT INTO history (command, param) VALUES (\"create\", \"" + path.string() + "\");";
 
-			const char* sqlq = "INSERT INTO history (command) VALUES (\"create\");";
+			const char* sqlq = preq.c_str();
 
 			char* errmsg = nullptr;
 			sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);
@@ -427,7 +432,9 @@ vector<path> FileManager::fin(path pathv, vector<string>& ext, vector<string>& e
 
 		sqlite3_open("history.db", &db);
 
-		const char* sqlq = "INSERT INTO history (command) VALUES (\"find\");";
+		const string preq = "INSERT INTO history (command, param) VALUES (\"find\", \"" + pathv.string() + "\");";
+
+		const char* sqlq = preq.c_str();
 
 		char* errmsg = nullptr;
 		sqlite3_exec(db, sqlq, nullptr, nullptr, &errmsg);

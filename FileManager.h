@@ -11,6 +11,7 @@
 #include <vector>
 #include <locale>
 #include <algorithm>
+#include <iomanip>
 #include "sqlite3.h"
 
 #ifdef _WIN64
