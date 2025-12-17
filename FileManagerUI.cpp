@@ -125,7 +125,6 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 	return vector<path>();
 }
 
-//тут посмотри, когда задач не будет
 void FileManagerUI::ui_asking() {
 	while (!stop) {
 		cout << "Создать файлы [1]\nПереименовать файлы [2]\nУдалить список файлов/папок [3]\nНайти список файлов/папок [4]\nЗадать флаги [5]\nПосмотреть информацию о флагах [6]\nИстория [7]\nЗакрыть [8]\nВыберите команду: ";
@@ -360,14 +359,19 @@ void FileManagerUI::ui_asking() {
 			cout << "Выбор:\nПоказать [1]\nОчистить [2]\nВвод: ";
 			getline(cin, d);
 			if (d == "1") {
-				//cout << "Ok" << endl;
 				get_history();
 			}
 			else if (d == "2") {
-				//можно добавить подтверждение удаления
-				if (del_history()) cout << "История очищена.\n\n";
-				else cout << "Произошла неизвестная ошибка!\n\n";
-				//cout << "Ok" << endl;
+				cout << "Вы уверены, что хотите очистить историю команд? [Yes/No]: ";
+				getline(cin, d);
+				transform(d.begin(), d.end(), d.begin(), [](unsigned char c) { return tolower(c); });
+				if (d == "yes") {
+					if (del_history()) cout << "История очищена.\n\n";
+					else cout << "Произошла неизвестная ошибка!\n\n";
+				}
+				else {
+					cout << "Операция отменена.\n\n";
+				}
 			}
 			else {
 				cout << "Выбрана неверная команда!\n\n";

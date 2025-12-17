@@ -1,5 +1,6 @@
 ﻿
 //добавить флаг чтобы функции не трогали корневую папку
+//столбец параметры
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
@@ -9,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <locale>
+#include <algorithm>
 #include "sqlite3.h"
 
 #ifdef _WIN64
