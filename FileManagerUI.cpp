@@ -18,7 +18,6 @@ vector<vector<string>> FileManagerUI::get_history() {
 	if (!history.empty()) {
 		cout << "История:\n";
 		for (int i = 0; i < history.size(); ++i) {
-			//cout << "    ";
 			for (int j = 0; j < history[0].size(); ++j) {
 				cout << setw(4) << "";
 				cout << history[i][j] << ' ';

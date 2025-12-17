@@ -142,7 +142,6 @@ bool FileManager::flags_parser(string all_flags) {
 	//cout << "Флаги успешно установлены.\n" << endl;
 }
 
-//тут есть баг, когда удаляешь все (возможно есть)
 bool FileManager::del(path path_, vector<string>& ext, vector<string>& exeptions, bool first_call) {
 	if (exists(path_)) {
 		if (!checker(path_.filename().string(), exeptions) && checker(path_.filename().string(), ext)) {
@@ -194,7 +193,6 @@ bool FileManager::del(path path_, vector<string>& ext, vector<string>& exeptions
 	}
 	return false;
 }
-
 
 //тут баг - при переименовании файлов в тоже имя происходит конфликт между ними и num получает лишнии номера
 //еще баг - нет рекурсивного обхода
@@ -359,6 +357,16 @@ bool FileManager::cre(path path, string name, int count_f, bool first_call) {
 	return false;
 }
 
+//Введите список файлов для переименования(если список закончен, то введите '.') :
+//	Gg *
+//	.
+//	Введите список ключевых слов для исключений, это файлы, которые не будут переименованы(если список закончен, то введите '.') :
+//	.
+//	Переименовано.
+//Итог: папка Gg осталась
+
+//Исправлено (99%)
+
 bool FileManager::checker(string name, vector<string>& str_list) {
 	if (regf == reg_off) {
 		transform(name.begin(), name.end(), name.begin(), [](char c) { return tolower((int)c); });
@@ -367,44 +375,81 @@ bool FileManager::checker(string name, vector<string>& str_list) {
 		}
 	}
 	for (int i = 0; i < str_list.size(); i++) {
-		int left = 0, right = 0;
-		int l = 0, rs = 0;
-		bool flag = true;
-		bool ending = false;
-		int last_rs = 0;
-		bool starting = false;
-		bool flag_for_starting = false;
-		bool flag_for_ending = true;
-		while (right < str_list[i].length()) {
-			while (right < str_list[i].length() && str_list[i][right] != '*') {
-				right++;
-			}
-			if (right == 0) starting = true;
-			if (right == 0) l++;
-			if (right == str_list[i].length() - 1) ending = true;
-			string sub = str_list[i].substr(left, right - left);
-			rs = sub.size();
-			while (rs + l < name.length() && name.substr(l, rs) != sub) {
-				l++;
-			}
-			last_rs = rs;
-			if (name.substr(l, rs) != sub) {
-				right = str_list[i].length();
-				flag = false;
+		int first = 0, second = 0;
+		bool ret_false = false;
+		while (first < name.length() && second < str_list[i].length()) {
+			if (str_list[i][second] != '*') {
+				if (str_list[i][second] != name[first]) {
+					ret_false = true;
+				}
+				++first;
+				++second;
 			}
 			else {
-				if (starting && (l != 0) || !starting && (l == 0)) flag_for_starting = true;
-				//тут добавили флаг
-				if (right >= str_list[i].length() - 1 && !ending && ((l + rs - 1) < name.length() - 1)) flag_for_ending = false;
-				left = right + 1;
-				right = left;
-				rs = 0;
+				while (second < str_list[i].length() && str_list[i][second] == '*') {
+					++second;
+				}
+				if (second >= str_list[i].length()) return true;
+				while (first < name.length() && second < str_list[i].length() && str_list[i][second] != name[first]) {
+					++first;
+				}
+				if (first >= name.length()) ret_false = true;
 			}
 		}
-		if (flag_for_ending && flag_for_starting && flag && ((ending && ((l + last_rs) < (name.length()))) || (!ending && ((l + last_rs) >= (name.length() - 1))))) return true;
+		if (first < name.length() || second < str_list[i].length()) ret_false = true;
+
+		if (!ret_false) return true;
 	}
 	return false;
 }
+
+
+//bool FileManager::checker(string name, vector<string>& str_list) {
+//	if (regf == reg_off) {
+//		transform(name.begin(), name.end(), name.begin(), [](char c) { return tolower((int)c); });
+//		for (int i = 0; i < str_list.size(); i++) {
+//			transform(str_list[i].begin(), str_list[i].end(), str_list[i].begin(), [](char c) { return tolower((int)c); });
+//		}
+//	}
+//	for (int i = 0; i < str_list.size(); i++) {
+//		int left = 0, right = 0;
+//		int l = 0, rs = 0;
+//		bool flag = true;
+//		bool ending = false;
+//		int last_rs = 0;
+//		bool starting = false;
+//		bool flag_for_starting = false;
+//		bool flag_for_ending = true;
+//		while (right < str_list[i].length()) {
+//			while (right < str_list[i].length() && str_list[i][right] != '*') {
+//				right++;
+//			}
+//			if (right == 0) starting = true;
+//			if (right == 0) l++;
+//			if (right == str_list[i].length() - 1) ending = true;
+//			string sub = str_list[i].substr(left, right - left);
+//			rs = sub.size();
+//			while (rs + l < name.length() && name.substr(l, rs) != sub) {
+//				l++;
+//			}
+//			last_rs = rs;
+//			if (name.substr(l, rs) != sub) {
+//				right = str_list[i].length();
+//				flag = false;
+//			}
+//			else {
+//				if (starting && (l != 0) || !starting && (l == 0)) flag_for_starting = true;
+//				//тут добавили флаг
+//				if (right >= str_list[i].length() - 1 && !ending && ((l + rs - 1) < name.length() - 1)) flag_for_ending = false;
+//				left = right + 1;
+//				right = left;
+//				rs = 0;
+//			}
+//		}
+//		if (flag_for_ending && flag_for_starting && flag && ((ending && ((l + last_rs) < (name.length()))) || (!ending && ((l + last_rs) >= (name.length() - 1))))) return true;
+//	}
+//	return false;
+//}
 
 bool FileManager::have_danger_characters(string name) {
 	for (char ch : danger_chars) {
