@@ -1,7 +1,5 @@
 ﻿#include "FileManager.h"
 
-//Добавляем поиск файлов
-
 int main()
 {
     //system("chcp 65001 > nul");
