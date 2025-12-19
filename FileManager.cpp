@@ -325,8 +325,20 @@ bool FileManager::cre(path path, string name, int count_f, bool first_call) {
 		}
 		if (rootf == root_on || (rootf == root_off && !this_first_call)) {
 			if (count_f == 1) {
-				if (cref == cre_files) ofstream{ path.string() + '\\' + name };
-				else if (cref == cre_dir) create_directory(path.string() + '\\' + name);
+				if (cref == cre_files){
+					#ifdef _WIN64
+						ofstream{ path.string() + '\\' + name };
+					#elif __linux__
+						ofstream{ path.string() + '/' + name };
+					#endif
+				}
+				else if (cref == cre_dir){
+					#ifdef _WIN64
+					    create_directory(path.string() + '\\' + name);
+					#elif __linux__
+					    create_directory(path.string() + '/' + name);
+					#endif
+				}
 			}
 			else {
 				int num = 1;
@@ -334,7 +346,11 @@ bool FileManager::cre(path path, string name, int count_f, bool first_call) {
 					string new_name;
 					bool first_dot;
 					do {
-						new_name = path.string() + "\\";
+						#ifdef _WIN64
+							new_name = path.string() + "\\";
+						#elif __linux__
+							new_name = path.string() + "/";
+						#endif
 						first_dot = true;
 						for (int i = 0; i < name.length(); i++) {
 							if (name[i] != '.') {
