@@ -202,8 +202,13 @@ bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions,
 			if ((rootf == root_on || (rootf == root_off && !first_call)) && (is_directory(path) && (renf == ren_dir || renf == ren_dir_files)) || (!is_directory(path) && (renf == ren_files || renf == ren_dir_files))) {
 				//тут
 				//if (rootf == root_on || (rootf == root_off && !first_call)) rename(path, path.parent_path().string() + '\\' + name);
-				rename(path, path.parent_path().string() + '\\' + name);
-				path = path.parent_path().string() + '\\' + name;
+				#ifdef _WIN64
+					rename(path, path.parent_path().string() + '\\' + name);
+					path = path.parent_path().string() + '\\' + name;
+				#elif __linux__
+					rename(path, path.parent_path().string() + '/' + name);
+					path = path.parent_path().string() + '/' + name;
+				#endif
 			}
 		}
 		if (first_call) {
@@ -239,7 +244,11 @@ bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions,
 					if (is_directory(it.path())) {
 						string new_name = it.path().parent_path().string();
 						if (!checker(it.path().filename().string(), exeptions) && checker(it.path().filename().string(), ext)) {
-							new_name += '\\' + name;
+							#ifdef _WIN64
+								new_name += '\\' + name;
+							#elif __linux__
+								new_name += '/' + name;
+							#endif
 						}
 						else {
 							new_name = it.path().string();
@@ -262,7 +271,11 @@ bool FileManager::ren(path path, vector<string>& ext, vector<string>& exeptions,
 					if (!checker(it.path().filename().string(), exeptions) && checker(it.path().filename().string(), ext)) {
 						bool first_dot;
 						do {
-							new_name = it.path().parent_path().string() + "\\";
+							#ifdef _WIN64
+								new_name = it.path().parent_path().string() + "\\";
+							#elif __linux__
+								new_name = it.path().parent_path().string() + "/";
+							#endif
 							first_dot = true;
 							for (int i = 0; i < name.length(); i++) {
 								if (name[i] != '.') {
