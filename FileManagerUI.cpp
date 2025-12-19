@@ -91,7 +91,6 @@ vector<path> FileManagerUI::fin(path pathv, vector<string>& ext, vector<string>&
 		for (path p : all_paths) {
 			if (checker(p.filename().string(), ext) && !checker(p.filename().string(), exeptions)) {
 				ans.push_back(p);
-				//cout << p << endl;
 			}
 		}
 
@@ -194,8 +193,20 @@ void FileManagerUI::ui_asking() {
 							exeptions.push_back(d);
 						}
 					} while (d != ".");
-					ren(path, ren_vec, exeptions, new_name);
-					cout << "Переименовано.\n" << endl;
+
+					cout << "Вы уверены, что хотите ПЕРЕИМЕНОВАТЬ? ";
+					if (recf == recursion_on) cout << "РЕКУРСИЯ включена! ";
+					else cout << "РЕКУРСИЯ выключена. ";
+					cout << "[Yes/No]: ";
+					getline(cin, d);
+					transform(d.begin(), d.end(), d.begin(), [](unsigned char c) { return tolower(c); });
+					if (d == "yes") {
+						if (ren(path, ren_vec, exeptions, new_name)) cout << "Переименовано.\n\n";
+						else cout << "Произошла неизвестная ошибка!\n\n";
+					}
+					else {
+						cout << "Операция отменена.\n\n";
+					}
 				}
 				else {
 					cout << "Имя имеет недопустимые символы: '\\', '/', ':', '*', '?', '\"', '<', '>', '|'.\n" << endl;
@@ -232,8 +243,20 @@ void FileManagerUI::ui_asking() {
 						exeptions.push_back(d);
 					}
 				} while (d != ".");
-				del(path, del_vec, exeptions);
-				cout << "Удалено.\n" << endl;
+
+				cout << "Вы уверены, что хотите УДАЛИТЬ? ";
+				if (recf == recursion_on) cout << "РЕКУРСИЯ включена! ";
+				else cout << "РЕКУРСИЯ выключена. ";
+				cout << "[Yes/No]: ";
+				getline(cin, d);
+				transform(d.begin(), d.end(), d.begin(), [](unsigned char c) { return tolower(c); });
+				if (d == "yes") {
+					if (del(path, del_vec, exeptions)) cout << "Удалено.\n\n";
+					else cout << "Произошла неизвестная ошибка!\n\n";
+				}
+				else {
+					cout << "Операция отменена.\n\n";
+				}
 			}
 			else {
 				cout << "Такого пути не существует\n" << endl;
